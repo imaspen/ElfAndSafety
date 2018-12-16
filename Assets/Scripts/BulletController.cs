@@ -11,12 +11,12 @@ public class BulletController : MonoBehaviour
 		GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(0, _speed);
 	}
 
-	private void OnCollisionEnter2D(Collision2D other)
+	private void OnTriggerEnter2D(Collider2D other)
 	{
-		HandleHit(other.gameObject);
+		HandleHit(other);
 	}
 
-	public virtual void HandleHit(GameObject hitting)
+	public virtual void HandleHit(Collider2D other)
 	{
 		Destroy(gameObject);
 	}

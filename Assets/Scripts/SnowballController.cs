@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class SnowballController : BulletController
 {
-    public override void HandleHit(GameObject hitting)
+    public override void HandleHit(Collider2D other)
     {
-        if (!hitting.CompareTag("Enemy") && !hitting.CompareTag("Bullet"))
-        {
+        Debug.Log(other);
+        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Wall"))
             Destroy(gameObject);
-        }
     }
 }

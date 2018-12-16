@@ -9,20 +9,21 @@ public class BulletPatternGenerator : MonoBehaviour
     [SerializeField] private int _shotsPerRotation;
     [SerializeField] private float _secondsPerRotation;
 
-    private float _rotationTime = 0.0f;
-    private float _nextTime = 0.0f;
+    private float _rotationTime;
 
     void Update()
     {
-        _rotationTime = (_rotationTime + Time.deltaTime) % _secondsPerRotation;
-        _nextTime += Time.deltaTime;
-        if (_nextTime > _secondsPerRotation / _shotsPerRotation)
+        _rotationTime += Time.deltaTime;
+        if (_rotationTime > _secondsPerRotation)
         {
-            float angle = _rotationTime / _secondsPerRotation * (float)Math.PI * 2;
-            var x = transform.position.x + 2 * Mathf.Cos(_rotationTime * Mathf.PI);
-            var y = transform.position.y + 2 * Mathf.Sin(_rotationTime * Mathf.PI);
-            Instantiate(_bullet, new Vector3(x, y), Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg));
-            _nextTime = _nextTime % (_secondsPerRotation / _shotsPerRotation);
+            for (var i = 0; i < _shotsPerRotation; i++)
+            {
+                var angle = i * (2 * Mathf.PI / _shotsPerRotation);
+                var x = transform.position.x + 2 * Mathf.Cos(angle);
+                var y = transform.position.y + 2 * Mathf.Sin(angle);
+                Instantiate(_bullet, new Vector3(x, y), Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg));
+            }
+            _rotationTime -= _secondsPerRotation;
         }
     }
 }

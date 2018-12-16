@@ -49,9 +49,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Enemy") && _damageTime <= 0)
+        if (other.gameObject.CompareTag("Enemy"))
+            TakeDamage(1);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy Bullet"))
+            TakeDamage(1);
+    }
+
+    private void TakeDamage(float amount)
+    {
+        if (_damageTime <= 0)
         {
-            if (--_hp <= 0)
+            _hp -= amount;
+            if (_hp <= 0)
                 Destroy(gameObject);
             else
                 _damageTime = _damageDelay;
