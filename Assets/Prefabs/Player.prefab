@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806eb281d10b5f44e809f41a8aeee062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireDelay: 0.1
-  maxSpeed: 6
-  bullet: {fileID: 1932778214171668, guid: 555b2a046fea3834c982bd2ad6ffc7e7, type: 2}
+  _fireDelay: 0.1
+  _maxSpeed: 5
+  _bullet: {fileID: 1932778214171668, guid: 555b2a046fea3834c982bd2ad6ffc7e7, type: 2}
 --- !u!212 &212306391318024096
 SpriteRenderer:
   m_ObjectHideFlags: 1
