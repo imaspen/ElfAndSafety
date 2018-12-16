@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
     private float _nextFire;
     private float _hp;
     private float _damageTime;
-
+    private Animator _anim;
+    private int _damageHash = Animator.StringToHash("DamageTaken");
+    
     [SerializeField] private float _fireDelay;
     [SerializeField] private int _maxSpeed;
     [SerializeField] private GameObject _bullet;
@@ -19,6 +21,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
         _hp = _maxHp;
     }
 
@@ -67,7 +70,10 @@ public class PlayerController : MonoBehaviour
             if (_hp <= 0)
                 Destroy(gameObject);
             else
+            {
                 _damageTime = _damageDelay;
+                _anim.SetTrigger(_damageHash);
+            }
         }
     }
 }
