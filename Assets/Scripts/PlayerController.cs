@@ -6,19 +6,26 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
-    private float _nextFire = 0.0f;
+    private float _nextFire;
+    private float _hp;
+    private float _damageTime;
 
     [SerializeField] private float _fireDelay;
     [SerializeField] private int _maxSpeed;
     [SerializeField] private GameObject _bullet;
+    [SerializeField] private float _maxHp;
+    [SerializeField] private float _damageDelay;
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _hp = _maxHp;
     }
 
     void Update()
     {
+        if (_damageTime > 0) _damageTime -= Time.deltaTime;
+        
         if (_nextFire > 0)
         {
             _nextFire -= Time.deltaTime;
@@ -38,5 +45,16 @@ public class PlayerController : MonoBehaviour
         var mouse = Input.mousePosition;
         var angle = Mathf.Atan2(mouse.y - position.y, mouse.x - position.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy") && _damageTime <= 0)
+        {
+            if (--_hp <= 0)
+                Destroy(gameObject);
+            else
+                _damageTime = _damageDelay;
+        }
     }
 }

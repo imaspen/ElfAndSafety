@@ -13,6 +13,11 @@ public class BulletController : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D other)
 	{
+		HandleHit(other.gameObject);
+	}
+
+	public virtual void HandleHit(GameObject hitting)
+	{
 		Destroy(gameObject);
 	}
 }

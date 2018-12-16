@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 58297122658256684}
   - component: {fileID: 50186080098804512}
   - component: {fileID: 114768823850051410}
+  - component: {fileID: 114007223761273852}
   m_Layer: 0
   m_Name: Snowman
   m_TagString: Enemy
@@ -62,7 +63,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &58297122658256684
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -78,6 +79,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &114007223761273852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1176181571477010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f844c36ec0fc544aa1862e432f2598a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bullet: {fileID: 1080162488508616, guid: eb6fc532ef834984b8f053898fab2404, type: 2}
+  _shotsPerRotation: 10
+  _secondsPerRotation: 2
 --- !u!114 &114768823850051410
 MonoBehaviour:
   m_ObjectHideFlags: 1
