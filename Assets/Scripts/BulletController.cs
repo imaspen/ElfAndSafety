@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public abstract class BulletController : MonoBehaviour
 {
 	[SerializeField] private float _speed;
 	
@@ -16,8 +16,5 @@ public class BulletController : MonoBehaviour
 		HandleHit(other);
 	}
 
-	public virtual void HandleHit(Collider2D other)
-	{
-		Destroy(gameObject);
-	}
+	protected abstract void HandleHit(Collider2D other);
 }
