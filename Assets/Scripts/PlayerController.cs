@@ -11,12 +11,22 @@ public class PlayerController : MonoBehaviour
     private float _damageTime;
     private Animator _anim;
     private int _damageHash = Animator.StringToHash("DamageTaken");
-    
+
     [SerializeField] private float _fireDelay;
     [SerializeField] private int _maxSpeed;
     [SerializeField] private GameObject _bullet;
     [SerializeField] private float _maxHp;
     [SerializeField] private float _damageDelay;
+
+    public float HP
+    {
+        get { return _hp; }
+    }
+
+    public float MaxHp
+    {
+        get { return _maxHp; }
+    }
 
     void Start()
     {
@@ -28,7 +38,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (_damageTime > 0) _damageTime -= Time.deltaTime;
-        
+
         if (_nextFire > 0)
         {
             _nextFire -= Time.deltaTime;
@@ -59,10 +69,13 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Enemy Bullet"))
-            TakeDamage(1);
+            if (TakeDamage(1))
+            {
+                Destroy(other.gameObject);
+            }
     }
 
-    private void TakeDamage(float amount)
+    private bool TakeDamage(float amount)
     {
         if (_damageTime <= 0)
         {
@@ -74,6 +87,10 @@ public class PlayerController : MonoBehaviour
                 _damageTime = _damageDelay;
                 _anim.SetTrigger(_damageHash);
             }
+
+            return true;
         }
+
+        return false;
     }
 }
