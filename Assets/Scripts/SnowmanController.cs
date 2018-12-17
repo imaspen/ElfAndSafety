@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SnowmanController : MonoBehaviour
 {
@@ -17,6 +18,15 @@ public class SnowmanController : MonoBehaviour
         _player = GameObject.Find("Player");
         _hp = _maxHP;
         _myRigidbody = GetComponent<Rigidbody2D>();
+        var x = 0f;
+        var y = 0f;
+        do
+        {
+            x = Random.Range(-8f, 8f);
+            y = Random.Range(-4f, 4f);
+        } while (Mathf.Abs(x - _player.transform.position.x) < 1 || Mathf.Abs(y - _player.transform.position.y) < 1);
+        transform.position = new Vector3(x, y);
+        _walkSpeed += Time.time / 30;
     }
 
     // Update is called once per frame
@@ -27,6 +37,7 @@ public class SnowmanController : MonoBehaviour
             Mathf.Atan2(transform.position.x - _player.transform.position.x,
                 _player.transform.position.y - transform.position.y) * Mathf.Rad2Deg;
         GetComponent<Rigidbody2D>().velocity = transform.rotation * walk;
+        Debug.Log(_walkSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
