@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
@@ -7,10 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     private float _nextFire;
-    private float _hp;
     private float _damageTime;
     private Animator _anim;
-    private int _damageHash = Animator.StringToHash("DamageTaken");
+    private readonly int _damageHash = Animator.StringToHash("DamageTaken");
 
     [SerializeField] private float _fireDelay;
     [SerializeField] private int _maxSpeed;
@@ -18,24 +18,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _maxHp;
     [SerializeField] private float _damageDelay;
 
-    public float HP
-    {
-        get { return _hp; }
-    }
+    public float HP { get; private set; }
 
     public float MaxHp
     {
         get { return _maxHp; }
     }
 
-    void Start()
+    private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        _hp = _maxHp;
+        HP = _maxHp;
     }
 
-    void Update()
+    private void Update()
     {
         if (_damageTime > 0) _damageTime -= Time.deltaTime;
 
@@ -51,7 +48,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         _rigidbody.velocity = _maxSpeed * new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         var position = Camera.main.WorldToScreenPoint(transform.position);
@@ -68,29 +65,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Enemy Bullet"))
-            if (TakeDamage(1))
-            {
-                Destroy(other.gameObject);
-            }
+        if (!other.gameObject.CompareTag("Enemy Bullet")) return;
+        if (TakeDamage(1)) Destroy(other.gameObject);
     }
 
     private bool TakeDamage(float amount)
     {
-        if (_damageTime <= 0)
+        if (_damageTime > 0) return false;
+        HP -= amount;
+        if (HP <= 0)
         {
-            _hp -= amount;
-            if (_hp <= 0)
-                Destroy(gameObject);
-            else
-            {
-                _damageTime = _damageDelay;
-                _anim.SetTrigger(_damageHash);
-            }
-
+            Destroy(gameObject);
             return true;
         }
+        _damageTime = _damageDelay;
+        _anim.SetTrigger(_damageHash);
 
-        return false;
+        return true;
+
     }
 }

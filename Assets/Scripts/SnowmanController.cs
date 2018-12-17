@@ -7,10 +7,16 @@ public class SnowmanController : MonoBehaviour
     private Rigidbody2D _myRigidbody;
     private float _knockBackTimer;
     private float _damageTime;
+    private GameController _gameController;
 
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _maxHP;
     [SerializeField] private float _knockBackAmount;
+
+    public float HP
+    {
+        get { return _hp; }
+    }
 
     // Use this for initialization
     private void Start()
@@ -28,6 +34,8 @@ public class SnowmanController : MonoBehaviour
 
         transform.position = new Vector3(x, y);
         _walkSpeed += Time.time / 30;
+
+        _gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -51,7 +59,10 @@ public class SnowmanController : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player Bullet") || _damageTime > 0) return;
         if (--_hp <= 0)
+        {
+            _gameController.Score += 20;
             Destroy(gameObject);
+        }
         else
         {
             _knockBackTimer = _knockBackAmount;
