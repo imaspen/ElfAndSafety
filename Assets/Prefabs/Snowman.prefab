@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _walkSpeed: 3
   _maxHP: 8
+  _knockBackAmount: 0.5
 --- !u!212 &212687354781408038
 SpriteRenderer:
   m_ObjectHideFlags: 1

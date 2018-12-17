@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class SnowmanController : MonoBehaviour
 {
     private GameObject _player;
-    private float _hp = 0;
+    private float _hp;
     private Rigidbody2D _myRigidbody;
-    
+    private float _knockBackTimer;
+    private float _damageTime;
+
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _maxHP;
-    
+    [SerializeField] private float _knockBackAmount;
+
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         _player = GameObject.Find("Player");
         _hp = _maxHP;
@@ -25,27 +25,37 @@ public class SnowmanController : MonoBehaviour
             x = Random.Range(-8f, 8f);
             y = Random.Range(-4f, 4f);
         } while (Mathf.Abs(x - _player.transform.position.x) < 1 || Mathf.Abs(y - _player.transform.position.y) < 1);
+
         transform.position = new Vector3(x, y);
         _walkSpeed += Time.time / 30;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         var walk = new Vector3(0, _walkSpeed);
         _myRigidbody.rotation =
             Mathf.Atan2(transform.position.x - _player.transform.position.x,
                 _player.transform.position.y - transform.position.y) * Mathf.Rad2Deg;
-        GetComponent<Rigidbody2D>().velocity = transform.rotation * walk;
-        Debug.Log(_walkSpeed);
+        _myRigidbody.velocity = transform.rotation * walk;
+        if (_knockBackTimer > 0)
+        {
+            _myRigidbody.velocity *= (_knockBackTimer - _knockBackAmount / 2) * -2;
+            _knockBackTimer -= Time.deltaTime;
+        }
+
+        if (_damageTime > 0) _damageTime -= Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player Bullet"))
+        if (!other.gameObject.CompareTag("Player Bullet") || _damageTime > 0) return;
+        if (--_hp <= 0)
+            Destroy(gameObject);
+        else
         {
-            if (--_hp <= 0)
-                Destroy(gameObject);
+            _knockBackTimer = _knockBackAmount;
+            _damageTime = 1.5f * _knockBackAmount;
         }
     }
 }
